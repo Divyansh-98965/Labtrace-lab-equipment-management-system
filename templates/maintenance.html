@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Maintenance & Calibration - LabTrace{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4 py-3">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="fw-bold mb-0 text-dark"><i class="bi bi-tools text-warning me-2"></i>Repairs, Calibration & Maintenance History</h4>
+            <span class="text-muted small">Tracking instrument calibration schedules, preventive maintenance, and technician diagnostics</span>
+        </div>
+        <span class="badge bg-warning text-dark px-3 py-2 fs-6">
+            {{ logs|length }} Maintenance Records
+        </span>
+    </div>
+
+    <div class="table-card">
+        <div class="table-card-header">
+            <h6 class="mb-0 fw-bold">Service & Calibration History</h6>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Asset</th>
+                        <th>Service Date</th>
+                        <th>Type</th>
+                        <th>Technician</th>
+                        <th>Description / Findings</th>
+                        <th class="text-end">Cost</th>
+                        <th>Next Due Date</th>
+                        <th class="text-center">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in logs %}
+                        <tr>
+                            <td>
+                                <div class="fw-semibold text-dark">{{ m.equipment_name }}</div>
+                                <span class="asset-tag-pill">{{ m.asset_tag }}</span>
+                            </td>
+                            <td>{{ m.service_date }}</td>
+                            <td>
+                                <span class="badge bg-light text-dark border">
+                                    {{ m.maintenance_type }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="fw-medium">{{ m.technician_name or 'External Vendor' }}</div>
+                            </td>
+                            <td class="small text-secondary" style="max-width: 280px;">
+                                {{ m.description }}
+                            </td>
+                            <td class="text-end fw-semibold">
+                                ${{ "{:,.2f}".format(m.cost) }}
+                            </td>
+                            <td>
+                                <span class="text-muted small">{{ m.next_scheduled_date or 'N/A' }}</span>
+                            </td>
+                            <td class="text-center">
+                                {% if m.status == 'Completed' %}
+                                    <span class="badge bg-success">Completed</span>
+                                {% elif m.status == 'In Progress' %}
+                                    <span class="badge bg-primary">In Progress</span>
+                                {% elif m.status == 'Scheduled' %}
+                                    <span class="badge bg-info">Scheduled</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ m.status }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+
+{% block title %}ER-to-Relational Mapping & DDL - LabTrace{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4 py-4">
+
+    <!-- Header Section -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center pb-3 mb-4 border-bottom">
+        <div>
+            <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="badge bg-success px-2 py-1"><i class="bi bi-signpost-split me-1"></i>Schema Mapping Algorithm</span>
+                <span class="badge bg-dark px-2 py-1">XAMPP / MySQL 8.0+ Compatible</span>
+            </div>
+            <h3 class="fw-bold mb-0 text-dark">ER-to-Relational Mapping & SQL DDL Specification</h3>
+            <p class="text-muted small mb-0">Formal transformation of conceptual entities, binary relationships, associative multi-way logs, and domain constraints into 12 normalized SQL tables.</p>
+        </div>
+        <div class="mt-3 mt-md-0 d-flex gap-2">
+            <button class="btn btn-outline-primary btn-sm" onclick="copyDDL()">
+                <i class="bi bi-clipboard me-1"></i>Copy Full SQL DDL
+            </button>
+            <a href="{{ url_for('analysis.normalization') }}" class="btn btn-primary btn-sm">
+                <i class="bi bi-layers me-1"></i>Next: Normalization Breakdown
+            </a>
+        </div>
+    </div>
+
+    <!-- Navigation Pills -->
+    <ul class="nav nav-pills mb-4 gap-2 bg-white p-2 rounded border shadow-sm">
+        <li class="nav-item">
+            <a class="nav-link text-secondary fw-semibold" href="{{ url_for('analysis.index') }}">
+                <i class="bi bi-speedometer2 me-1"></i>Overview & Scorecard
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-secondary fw-semibold" href="{{ url_for('analysis.er_diagram') }}">
+                <i class="bi bi-diagram-3 me-1"></i>Interactive ER Diagrams
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active fw-semibold" href="{{ url_for('analysis.mapping') }}">
+                <i class="bi bi-signpost-split me-1"></i>ER-to-Relational Mapping
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-secondary fw-semibold" href="{{ url_for('analysis.normalization') }}">
+                <i class="bi bi-layers me-1"></i>Normalization (UNF &rarr; BCNF)
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-secondary fw-semibold" href="{{ url_for('analysis.proofs') }}">
+                <i class="bi bi-calculator me-1"></i>Lossless & Minimal Cover Proofs
+            </a>
+        </li>
+    </ul>
+
+    <!-- 5-Step Transformation Framework -->
+    <div class="card border shadow-sm mb-4">
+        <div class="card-header bg-white py-3 border-bottom">
+            <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-diagram-2 text-primary me-2"></i>5-Step ER-to-Relational Transformation Framework</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 80px;">Step</th>
+                            <th style="width: 220px;">ER Construct Rule</th>
+                            <th>Conceptual ER Input</th>
+                            <th>Relational Database Implementation (MySQL)</th>
+                            <th>LabTrace Implementation Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in mapping_rules %}
+                            <tr>
+                                <td class="text-center fw-bold text-primary font-monospace">Rule #{{ r.step }}</td>
+                                <td class="fw-semibold text-dark">{{ r.rule }}</td>
+                                <td class="small text-secondary">{{ r.concept }}</td>
+                                <td class="small">{{ r.relational }}</td>
+                                <td><span class="badge bg-light text-dark border font-monospace">{{ r.examples }}</span></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detailed 12-Table Mapping Matrix -->
+    <div class="card border shadow-sm mb-4">
+        <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-table text-success me-2"></i>Comprehensive 12-Table Entity-to-Schema Mapping Matrix</h5>
+            <span class="badge bg-success-subtle text-success border border-success-subtle font-monospace">12 Relations &bull; 18 Constraints</span>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-sm table-hover align-middle mb-0">
+                    <thead class="table-light small text-uppercase">
+                        <tr>
+                            <th>Conceptual Entity</th>
+                            <th>Target Table</th>
+                            <th>Primary Key (PK)</th>
+                            <th>Foreign Keys (FK) & Referencing Actions</th>
+                            <th>Alternate Candidate Keys (UQ)</th>
+                            <th>Domain / Check Constraints</th>
+                        </tr>
+                    </thead>
+                    <tbody class="small">
+                        <tr>
+                            <td class="fw-semibold">Role Authority</td>
+                            <td class="font-monospace text-primary fw-bold">roles</td>
+                            <td class="font-monospace text-success">role_id</td>
+                            <td class="text-muted">None (Lookup root)</td>
+                            <td class="font-monospace">role_name</td>
+                            <td><span class="badge bg-light text-dark border">NOT NULL</span></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semibold">University Department</td>
+                            <td class="font-monospace text-primary fw-bold">departments</td>
+                            <td class="font-monospace text-success">department_id</td>
+                            <td class="text-muted">None (Lookup root)</td>
+                            <td class="font-monospace">department_name, code</td>
+                            <td><span class="badge bg-light text-dark border">NOT NULL</span></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semibold">University User</td>
+                            <td class="font-monospace text-primary fw-bold">users</td>
+                            <td class="font-monospace text-success">user_id</td>
+                            <td class="font-monospace text-secondary">role_id (RESTRICT), department_id (RESTRICT)</td>
+                            <td class="font-monospace">email</td>
+                            <td><span class="badge bg-light text-dark border">status ENUM('Active', 'Inactive', 'Suspended')</span></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semibold">Research Facility</td>
+                            <td class="font-monospace text-primary fw-bold">laboratories</td>
+                            <td class="font-monospace text-success">lab_id</td>
+                            <td class="font-monospace text-secondary">department_id (RESTRICT), in_charge_user_id (SET NULL)</td>
+                            <td class="text-muted">Composite (building, room_number)</td>
+                            <td><span class="badge bg-light text-dark border">CHECK (capacity > 0)</span></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semibold">Equipment Classification</td>
+                            <td class="font-monospace text-primary fw-bold">equipment_categories</td>
+                            <td class="font-monospace text-success">category_id</td>
+                            <td class="text-muted">None (Lookup root)</td>
+                            <td class="font-monospace">category_name</td>
+                            <td><span class="badge bg-light text-dark border">NOT NULL</span></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semibold">Vendor / Supplier</td>
+                            <td class="font-monospace text-primary fw-bold">suppliers</td>
+                            <td class="font-monospace text-success">supplier_id</td>
+                            <td class="text-muted">None (Lookup root)</td>
+                            <td class="text-muted">supplier_name (Index)</td>
+                            <td><span class="badge bg-light text-dark border">NOT NULL</span></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semibold">Laboratory Equipment Asset</td>
+                            <td class="font-monospace text-primary fw-bold">equipment</td>
+                            <td class="font-monospace text-success">equipment_id</td>
+                            <td class="font-monospace text-secondary">category_id (RESTRICT), lab_id (RESTRICT), supplier_id (SET NULL)</td>
+                            <td class="font-monospace">asset_tag, serial_number</td>
+                            <td><span class="badge bg-light text-dark border">CHECK (cost >= 0), status ENUM, condition ENUM</span></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semibold">Supply & Reagent Stock</td>
+                            <td class="font-monospace text-primary fw-bold">consumables</td>
+                            <td class="font-monospace text-success">consumable_id</td>
+                            <td class="font-monospace text-secondary">lab_id (RESTRICT)</td>
+                            <td class="font-monospace">sku</td>
+                            <td><span class="badge bg-light text-dark border">CHECK (quantity >= 0), CHECK (min_stock_level >= 0)</span></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semibold">Custody Loan Event</td>
+                            <td class="font-monospace text-primary fw-bold">borrowings</td>
+                            <td class="font-monospace text-success">borrowing_id</td>
+                            <td class="font-monospace text-secondary">equipment_id (CASCADE), user_id (RESTRICT)</td>
+                            <td class="font-monospace text-muted">Composite (equipment_id, borrow_date)</td>
+                            <td><span class="badge bg-light text-dark border">CHECK (expected_return_date >= borrow_date)</span></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semibold">Servicing & Calibration</td>
+                            <td class="font-monospace text-primary fw-bold">maintenance</td>
+                            <td class="font-monospace text-success">maintenance_id</td>
+                            <td class="font-monospace text-secondary">equipment_id (CASCADE), technician_id (SET NULL)</td>
+                            <td class="text-muted">Surrogate Key</td>
+                            <td><span class="badge bg-light text-dark border">CHECK (cost >= 0.00), maintenance_type ENUM</span></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semibold">Relocation Movement Log</td>
+                            <td class="font-monospace text-primary fw-bold">transactions</td>
+                            <td class="font-monospace text-success">transaction_id</td>
+                            <td class="font-monospace text-secondary">equipment_id (CASCADE), from_lab (SET NULL), to_lab (RESTRICT), user (SET NULL)</td>
+                            <td class="text-muted">Surrogate Key</td>
+                            <td><span class="badge bg-light text-dark border">transaction_type ENUM</span></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semibold">Procurement Purchase Order</td>
+                            <td class="font-monospace text-primary fw-bold">purchase_orders</td>
+                            <td class="font-monospace text-success">po_id</td>
+                            <td class="font-monospace text-secondary">supplier_id (RESTRICT), ordered_by_user_id (SET NULL)</td>
+                            <td class="font-monospace">po_number</td>
+                            <td><span class="badge bg-light text-dark border">CHECK (total_amount >= 0.00), status ENUM</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- SQL DDL Viewer with Syntax Highlighting and Copy Action -->
+    <div class="card border shadow-sm">
+        <div class="card-header bg-dark text-white py-2 d-flex justify-content-between align-items-center">
+            <span class="small font-monospace"><i class="bi bi-filetype-sql text-info me-2"></i>schema.sql (Complete 12-Table MySQL DDL with Referential Constraints)</span>
+            <button class="btn btn-sm btn-outline-light py-0" onclick="copyDDL()"><i class="bi bi-clipboard me-1"></i>Copy DDL</button>
+        </div>
+        <div class="card-body p-0">
+            <pre class="mb-0 p-3 bg-light text-dark font-monospace" style="max-height: 500px; overflow-y: auto; font-size: 0.8rem; line-height: 1.45;"><code id="sqlDDLCode">{{ ddl_content }}</code></pre>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function copyDDL() {
+        const ddlText = document.getElementById('sqlDDLCode').innerText;
+        navigator.clipboard.writeText(ddlText).then(() => {
+            alert('Full 12-Table SQL DDL Script copied to clipboard successfully!');
+        }).catch(err => {
+            console.error('Failed to copy DDL:', err);
+        });
+    }
+</script>
+{% endblock %}
+

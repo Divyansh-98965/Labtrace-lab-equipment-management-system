@@ -1,0 +1,441 @@
+/* ==========================================================================
+   LabTrace - Custom Stylesheet
+   ========================================================================== */
+
+:root {
+    --primary-color: #0f172a;
+    --primary-accent: #2563eb;
+    --secondary-accent: #38bdf8;
+    --success-accent: #10b981;
+    --warning-accent: #f59e0b;
+    --danger-accent: #ef4444;
+    --card-bg: #ffffff;
+    --body-bg: #f8fafc;
+    --border-color: #e2e8f0;
+    --text-muted: #64748b;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+}
+
+body {
+    background-color: var(--body-bg);
+    font-family: var(--font-sans);
+    color: #1e293b;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navbar */
+.navbar-custom {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    font-size: 1.35rem;
+}
+
+.brand-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+    border-radius: 8px;
+    margin-right: 10px;
+    color: white;
+}
+
+.nav-link {
+    font-weight: 500;
+    font-size: 0.925rem;
+    padding: 0.5rem 0.85rem !important;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff !important;
+}
+
+/* KPI Cards */
+.kpi-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.25rem 1.4rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 100%;
+}
+
+.kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.06);
+}
+
+.kpi-icon-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+}
+
+.kpi-label {
+    font-size: 0.825rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.kpi-value {
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.2;
+}
+
+/* Data Table Card */
+.table-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    overflow: hidden;
+}
+
+.table-card-header {
+    background-color: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 1.5rem;
+}
+
+.table thead th {
+    background-color: #f1f5f9;
+    color: #475569;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-top: none;
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.85rem 1rem;
+    white-space: nowrap;
+}
+
+.table tbody td {
+    padding: 0.85rem 1rem;
+    vertical-align: middle;
+    font-size: 0.895rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+/* Badges */
+.badge-status {
+    padding: 0.35rem 0.65rem;
+    font-weight: 600;
+    font-size: 0.75rem;
+    border-radius: 20px;
+    letter-spacing: 0.2px;
+}
+
+.badge-available {
+    background-color: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+}
+
+.badge-in-use {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+}
+
+.badge-maintenance {
+    background-color: #fffbeb;
+    color: #b45309;
+    border: 1px solid #fde68a;
+}
+
+.badge-decommissioned {
+    background-color: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+.badge-reserved {
+    background-color: #f5f3ff;
+    color: #6d28d9;
+    border: 1px solid #ddd6fe;
+}
+
+/* Asset Tag Pill */
+.asset-tag-pill {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-weight: 600;
+    font-size: 0.8rem;
+    background-color: #e2e8f0;
+    color: #334155;
+    padding: 0.2rem 0.55rem;
+    border-radius: 5px;
+}
+
+/* Filter Bar */
+.filter-card {
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.1rem 1.4rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--primary-accent);
+    border-color: var(--primary-accent);
+    font-weight: 500;
+}
+
+.btn-primary:hover {
+    background-color: #1d4ed8;
+    border-color: #1d4ed8;
+}
+
+/* Schema Viewer Elements */
+.schema-table-card {
+    border-left: 4px solid var(--primary-accent);
+}
+
+/* Footer */
+footer {
+    margin-top: auto;
+    background-color: #ffffff;
+    border-top: 1px solid var(--border-color);
+    padding: 1.25rem 0;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+/* ==========================================================================
+   Normalization UI Fix & Strict Boundary Constraint Classes
+   Prevents any relational schema text or KaTeX formulas from overflowing borders
+   ========================================================================== */
+.norm-card {
+    min-width: 0 !important;
+    overflow: hidden !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+}
+
+.norm-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 1.25rem;
+    min-width: 0 !important;
+    width: 100%;
+}
+
+.schema-code-box {
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: auto !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+    white-space: normal !important;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+.schema-code-box code {
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+    color: #1e293b;
+    font-size: 0.85rem;
+}
+
+.katex-display {
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    padding: 0.5rem 0 !important;
+    margin: 0.5rem 0 !important;
+}
+
+.katex {
+    max-width: 100%;
+    font-size: 0.95em;
+    overflow-wrap: break-word;
+}
+
+/* ==========================================================================
+   Chen-Style ER Diagram Interactive SVG Canvas Styling
+   Strict Chen ER Notation: Rectangles, Diamonds, Ellipses with Underlined Keys
+   ========================================================================== */
+.chen-canvas-container {
+    position: relative;
+    width: 100%;
+    height: 720px;
+    background: #f8fafc;
+    background-image: 
+        radial-gradient(#cbd5e1 1.2px, transparent 1.2px),
+        radial-gradient(#cbd5e1 1.2px, #f8fafc 1.2px);
+    background-size: 24px 24px;
+    background-position: 0 0, 12px 12px;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: grab;
+}
+
+.chen-canvas-container:active {
+    cursor: grabbing;
+}
+
+.chen-svg-viewport {
+    width: 100%;
+    height: 100%;
+    user-select: none;
+}
+
+/* Chen Entities (Rectangles) */
+.chen-entity-rect {
+    fill: #1e293b;
+    stroke: #0f172a;
+    stroke-width: 2.5px;
+    rx: 4px;
+    ry: 4px;
+    filter: drop-shadow(0 3px 6px rgba(0,0,0,0.12));
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.chen-entity-rect:hover {
+    fill: #2563eb;
+    stroke: #1d4ed8;
+    filter: drop-shadow(0 5px 12px rgba(37,99,235,0.3));
+}
+
+.chen-entity-text {
+    fill: #ffffff;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 13px;
+    text-anchor: middle;
+    pointer-events: none;
+    letter-spacing: 0.5px;
+}
+
+/* Chen Relationships (Diamonds) */
+.chen-rel-diamond {
+    fill: #3b82f6;
+    stroke: #1d4ed8;
+    stroke-width: 2px;
+    filter: drop-shadow(0 3px 6px rgba(0,0,0,0.1));
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.chen-rel-diamond:hover {
+    fill: #0284c7;
+    stroke: #0369a1;
+    filter: drop-shadow(0 4px 10px rgba(2,132,199,0.3));
+}
+
+.chen-rel-text {
+    fill: #ffffff;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 11px;
+    text-anchor: middle;
+    pointer-events: none;
+}
+
+/* Chen Attributes (Ellipses) */
+.chen-attr-ellipse {
+    fill: #ffffff;
+    stroke: #64748b;
+    stroke-width: 1.6px;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.06));
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.chen-attr-ellipse:hover {
+    stroke: #2563eb;
+    stroke-width: 2.2px;
+    fill: #eff6ff;
+}
+
+.chen-attr-ellipse.pk {
+    stroke: #e11d48;
+    stroke-width: 2px;
+    fill: #fff1f2;
+}
+
+.chen-attr-ellipse.fk {
+    stroke: #0284c7;
+    stroke-dasharray: 4, 3;
+    stroke-width: 1.8px;
+    fill: #f0f9ff;
+}
+
+.chen-attr-text {
+    fill: #1e293b;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    text-anchor: middle;
+    pointer-events: none;
+}
+
+.chen-attr-text.pk {
+    font-weight: 700;
+    fill: #9f1239;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.chen-attr-text.fk {
+    fill: #0369a1;
+    font-style: italic;
+}
+
+/* Chen Connector Lines & Cardinality */
+.chen-edge {
+    stroke: #475569;
+    stroke-width: 1.8px;
+    fill: none;
+}
+
+.chen-edge-attr {
+    stroke: #94a3b8;
+    stroke-width: 1.2px;
+    stroke-dasharray: 2, 2;
+    fill: none;
+}
+
+.chen-cardinality-badge {
+    fill: #0f172a;
+    font-family: 'SFMono-Regular', Consolas, monospace;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+

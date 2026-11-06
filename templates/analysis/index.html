@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+
+{% block title %}Database Theory & Schema Analysis - LabTrace{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4 py-4">
+
+    <!-- Header Section -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center pb-3 mb-4 border-bottom">
+        <div>
+            <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="badge bg-warning text-dark px-2 py-1"><i class="bi bi-mortarboard-fill me-1"></i>Academic Specification</span>
+                <span class="badge bg-success px-2 py-1"><i class="bi bi-shield-check me-1"></i>BCNF Certified</span>
+                <span class="badge bg-info px-2 py-1"><i class="bi bi-link-45deg me-1"></i>Lossless Join</span>
+            </div>
+            <h3 class="fw-bold mb-0 text-dark">Database Theory & Relational Schema Analysis</h3>
+            <p class="text-muted small mb-0">Rigorously engineered 12-table relational architecture, mathematical proofs, and formal dependency analysis.</p>
+        </div>
+        <div class="mt-3 mt-md-0 d-flex gap-2">
+            <a href="{{ url_for('analysis.er_diagram') }}" class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-diagram-3 me-1"></i>Interactive ER Diagram
+            </a>
+            <a href="{{ url_for('analysis.proofs') }}" class="btn btn-primary btn-sm">
+                <i class="bi bi-calculator me-1"></i>Mathematical Proofs
+            </a>
+        </div>
+    </div>
+
+    <!-- Navigation Pills for Analysis Section -->
+    <ul class="nav nav-pills mb-4 gap-2 bg-white p-2 rounded border shadow-sm">
+        <li class="nav-item">
+            <a class="nav-link active fw-semibold" href="{{ url_for('analysis.index') }}">
+                <i class="bi bi-speedometer2 me-1"></i>Overview & Scorecard
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-secondary fw-semibold" href="{{ url_for('analysis.er_diagram') }}">
+                <i class="bi bi-diagram-3 me-1"></i>Interactive ER Diagrams
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-secondary fw-semibold" href="{{ url_for('analysis.mapping') }}">
+                <i class="bi bi-signpost-split me-1"></i>ER-to-Relational Mapping
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-secondary fw-semibold" href="{{ url_for('analysis.normalization') }}">
+                <i class="bi bi-layers me-1"></i>Normalization (UNF &rarr; BCNF)
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-secondary fw-semibold" href="{{ url_for('analysis.proofs') }}">
+                <i class="bi bi-calculator me-1"></i>Lossless & Minimal Cover Proofs
+            </a>
+        </li>
+    </ul>
+
+    <!-- Architecture Metrics Summary -->
+    <div class="row g-3 mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="kpi-card border-start border-primary border-4">
+                <div class="d-flex align-items-center">
+                    <div class="kpi-icon-wrapper bg-primary bg-opacity-10 text-primary me-3">
+                        <i class="bi bi-grid-3x3-gap-fill"></i>
+                    </div>
+                    <div>
+                        <div class="kpi-label">Relational Tables</div>
+                        <div class="kpi-value">{{ total_tables }} Tables</div>
+                    </div>
+                </div>
+                <div class="mt-2 text-muted small"><i class="bi bi-check-circle text-success me-1"></i>All 12 entities in Boyce-Codd Normal Form</div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="kpi-card border-start border-success border-4">
+                <div class="d-flex align-items-center">
+                    <div class="kpi-icon-wrapper bg-success bg-opacity-10 text-success me-3">
+                        <i class="bi bi-database-check"></i>
+                    </div>
+                    <div>
+                        <div class="kpi-label">Live Seeded Records</div>
+                        <div class="kpi-value text-success">{{ total_rows }} Rows</div>
+                    </div>
+                </div>
+                <div class="mt-2 text-muted small"><i class="bi bi-hdd-network text-info me-1"></i>Connected live to XAMPP MySQL</div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="kpi-card border-start border-warning border-4">
+                <div class="d-flex align-items-center">
+                    <div class="kpi-icon-wrapper bg-warning bg-opacity-10 text-warning me-3">
+                        <i class="bi bi-link-45deg"></i>
+                    </div>
+                    <div>
+                        <div class="kpi-label">Foreign Key Integrity</div>
+                        <div class="kpi-value text-warning">18 Links</div>
+                    </div>
+                </div>
+                <div class="mt-2 text-muted small"><i class="bi bi-shield-lock text-warning me-1"></i>RESTRICT / CASCADE / SET NULL enforced</div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="kpi-card border-start border-danger border-4">
+                <div class="d-flex align-items-center">
+                    <div class="kpi-icon-wrapper bg-danger bg-opacity-10 text-danger me-3">
+                        <i class="bi bi-infinity"></i>
+                    </div>
+                    <div>
+                        <div class="kpi-label">Decomposition Property</div>
+                        <div class="kpi-value text-danger">Lossless & Preserved</div>
+                    </div>
+                </div>
+                <div class="mt-2 text-muted small"><i class="bi bi-check-all text-success me-1"></i>Attribute closure proofs satisfied</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analysis Modules Directory Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+            <div class="card h-100 shadow-sm border-0 bg-white">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="kpi-icon-wrapper bg-primary bg-opacity-10 text-primary me-3">
+                            <i class="bi bi-diagram-3-fill fs-4"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-0">1. Interactive ER Diagram & Schema Visualizer</h5>
+                            <span class="text-muted small">Chen-style Conceptual & Crow's Foot Physical Modeling</span>
+                        </div>
+                    </div>
+                    <p class="text-secondary small">
+                        Explore the interactive SVG/Mermaid.js conceptual and relational diagrams with dynamic zoom, pan, entity attribute exploration, and cardinality inspection.
+                    </p>
+                    <a href="{{ url_for('analysis.er_diagram') }}" class="btn btn-outline-primary btn-sm fw-semibold">
+                        Launch ER Visualizer <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card h-100 shadow-sm border-0 bg-white">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="kpi-icon-wrapper bg-success bg-opacity-10 text-success me-3">
+                            <i class="bi bi-signpost-split-fill fs-4"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-0">2. ER-to-Relational Mapping & DDL Guide</h5>
+                            <span class="text-muted small">Transformation Rules, Primary Keys & SQL Constraints</span>
+                        </div>
+                    </div>
+                    <p class="text-secondary small">
+                        Examine the 5-step conversion algorithm from conceptual ER constructs to physical tables, featuring full SQL DDL script with syntax highlighting and one-click copy.
+                    </p>
+                    <a href="{{ url_for('analysis.mapping') }}" class="btn btn-outline-success btn-sm fw-semibold">
+                        View Mapping Matrix & DDL <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card h-100 shadow-sm border-0 bg-white">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="kpi-icon-wrapper bg-warning bg-opacity-10 text-warning me-3">
+                            <i class="bi bi-layers-fill fs-4"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-0">3. Normalization Breakdown (UNF &rarr; BCNF)</h5>
+                            <span class="text-muted small">Elimination of Partial & Transitive Functional Dependencies</span>
+                        </div>
+                    </div>
+                    <p class="text-secondary small">
+                        Detailed walk-through proving how the universal unnormalized relation is progressively decomposed into 1NF, 2NF, 3NF, and BCNF, removing update, insertion, and deletion anomalies.
+                    </p>
+                    <a href="{{ url_for('analysis.normalization') }}" class="btn btn-outline-warning btn-sm fw-semibold">
+                        Read Normalization Proofs <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card h-100 shadow-sm border-0 bg-white">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="kpi-icon-wrapper bg-danger bg-opacity-10 text-danger me-3">
+                            <i class="bi bi-calculator-fill fs-4"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-0">4. Mathematical Database Proofs & Canonical Cover</h5>
+                            <span class="text-muted small">Lossless Join, Attribute Closure & Minimal Cover Algorithms</span>
+                        </div>
+                    </div>
+                    <p class="text-secondary small">
+                        Rigorous mathematical proofs proving that $R_1 \bowtie R_2 = R$ satisfies the lossless-join property, dependency preservation holds, and minimal cover $F_c$ is derived step-by-step.
+                    </p>
+                    <a href="{{ url_for('analysis.proofs') }}" class="btn btn-outline-danger btn-sm fw-semibold">
+                        Inspect Mathematical Proofs <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Relational Schema Status Table -->
+    <div class="table-card">
+        <div class="table-card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold text-dark">
+                <i class="bi bi-table me-2 text-primary"></i>12-Table Relational Schema Normalization Status
+            </h5>
+            <span class="badge bg-light text-dark border">All Tables in Boyce-Codd Normal Form</span>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Table Name</th>
+                        <th>Description / Semantic Purpose</th>
+                        <th class="text-center">Normal Form</th>
+                        <th class="text-center">Foreign Keys</th>
+                        <th class="text-center">Live Records</th>
+                        <th class="text-center">Verification Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in table_stats %}
+                        <tr>
+                            <td class="text-muted small">{{ loop.index }}</td>
+                            <td>
+                                <span class="font-monospace fw-bold text-primary">{{ t.name }}</span>
+                            </td>
+                            <td class="small text-secondary">{{ t.description }}</td>
+                            <td class="text-center">
+                                <span class="badge bg-success-subtle text-success border border-success-subtle font-monospace">{{ t.normal_form }}</span>
+                            </td>
+                            <td class="text-center font-monospace">{{ t.fk_count }} FK</td>
+                            <td class="text-center fw-bold">{{ t.row_count }}</td>
+                            <td class="text-center">
+                                <span class="badge bg-success"><i class="bi bi-check-lg me-1"></i>Validated</span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+

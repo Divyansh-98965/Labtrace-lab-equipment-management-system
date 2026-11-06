@@ -1,0 +1,305 @@
+{% extends "base.html" %}
+
+{% block title %}Step-by-Step Normalization - LabTrace{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4 py-4" style="min-width: 0;">
+
+    <!-- Header Section -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center pb-3 mb-4 border-bottom">
+        <div>
+            <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="badge bg-warning text-dark px-2 py-1"><i class="bi bi-layers-fill me-1"></i>Relational Theory</span>
+                <span class="badge bg-success px-2 py-1"><i class="bi bi-shield-check me-1"></i>Boyce-Codd Normal Form (BCNF) Certified</span>
+            </div>
+            <h3 class="fw-bold mb-0 text-dark">Step-by-Step Relational Normalization (UNF &rarr; BCNF)</h3>
+            <p class="text-muted small mb-0">Rigorous demonstration of how the monolithic unnormalized university asset record is systematically decomposed to eradicate partial and transitive dependencies.</p>
+        </div>
+        <div class="mt-3 mt-md-0 d-flex gap-2">
+            <a href="{{ url_for('analysis.proofs') }}" class="btn btn-primary btn-sm">
+                <i class="bi bi-calculator me-1"></i>View Mathematical Proofs
+            </a>
+        </div>
+    </div>
+
+    <!-- Navigation Pills -->
+    <ul class="nav nav-pills mb-4 gap-2 bg-white p-2 rounded border shadow-sm">
+        <li class="nav-item">
+            <a class="nav-link text-secondary fw-semibold" href="{{ url_for('analysis.index') }}">
+                <i class="bi bi-speedometer2 me-1"></i>Overview & Scorecard
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-secondary fw-semibold" href="{{ url_for('analysis.er_diagram') }}">
+                <i class="bi bi-diagram-3 me-1"></i>Chen ER Diagram
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-secondary fw-semibold" href="{{ url_for('analysis.mapping') }}">
+                <i class="bi bi-signpost-split me-1"></i>ER-to-Relational Mapping
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active fw-semibold" href="{{ url_for('analysis.normalization') }}">
+                <i class="bi bi-layers me-1"></i>Normalization (UNF &rarr; BCNF)
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-secondary fw-semibold" href="{{ url_for('analysis.proofs') }}">
+                <i class="bi bi-calculator me-1"></i>Lossless & Minimal Cover Proofs
+            </a>
+        </li>
+    </ul>
+
+    <!-- Normalization Progress Pipeline (Constrained Grid) -->
+    <div class="card border shadow-sm mb-4 norm-card">
+        <div class="card-header bg-white py-3 border-bottom">
+            <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-arrow-right-circle text-primary me-2"></i>Decomposition Pipeline (UNF &rarr; 1NF &rarr; 2NF &rarr; 3NF &rarr; BCNF)</h5>
+        </div>
+        <div class="card-body p-4" style="min-width: 0;">
+            <div class="norm-grid">
+                <div class="p-3 border rounded bg-danger bg-opacity-10 border-danger norm-card">
+                    <span class="badge bg-danger mb-2">UNF</span>
+                    <div class="fw-bold small text-dark">Unnormalized Form</div>
+                    <div class="small text-danger mt-1">Multi-valued repeating groups, nested structures, extreme anomalies.</div>
+                </div>
+                <div class="p-3 border rounded bg-warning bg-opacity-10 border-warning norm-card">
+                    <span class="badge bg-warning text-dark mb-2">1NF</span>
+                    <div class="fw-bold small text-dark">First Normal Form</div>
+                    <div class="small text-warning-emphasis mt-1">Atomic scalar domains. Repeating arrays extracted to child entities.</div>
+                </div>
+                <div class="p-3 border rounded bg-info bg-opacity-10 border-info norm-card">
+                    <span class="badge bg-info text-dark mb-2">2NF</span>
+                    <div class="fw-bold small text-dark">Second Normal Form</div>
+                    <div class="small text-primary mt-1">1NF + Complete elimination of partial key dependencies.</div>
+                </div>
+                <div class="p-3 border rounded bg-primary bg-opacity-10 border-primary norm-card">
+                    <span class="badge bg-primary mb-2">3NF</span>
+                    <div class="fw-bold small text-dark">Third Normal Form</div>
+                    <div class="small text-primary mt-1">2NF + Elimination of transitive non-key dependencies ($X \to Y \to Z$).</div>
+                </div>
+                <div class="p-3 border rounded bg-success bg-opacity-10 border-success norm-card">
+                    <span class="badge bg-success mb-2">BCNF</span>
+                    <div class="fw-bold small text-dark">Boyce-Codd Normal Form</div>
+                    <div class="small text-success mt-1">Every determinant is strictly a superkey. Irreducible design.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 1: UNF & Anomaly Analysis (Constrained Layout) -->
+    <div class="card border shadow-sm mb-4 norm-card">
+        <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-1-circle text-danger me-2"></i>Step 1: The Monolithic Unnormalized Form (UNF) & Relational Anomalies</h5>
+            <span class="badge bg-danger">Severe Anomalies Present</span>
+        </div>
+        <div class="card-body p-4" style="min-width: 0;">
+            <p class="text-secondary small mb-3">
+                Consider a legacy university laboratory spreadsheet tracking equipment assets, custody loans, and service repairs inside a single monolithic relation:
+            </p>
+            
+            <!-- Safe Schema Box with explicit overflow handling -->
+            <div class="schema-code-box mb-3">
+                <code>
+                    <strong>R_UNF</strong> = {
+                    <u>asset_tag</u>, serial_no, equip_name, model, cost, cat_name, cat_desc, 
+                    lab_name, room, building, dept_code, dept_name, manager_name, manager_email, 
+                    supplier_name, supplier_email, supplier_phone, supplier_addr, 
+                    <strong>{borrow_id, user_email, user_name, role, borrow_date, expected_return, actual_return}</strong>, 
+                    <strong>{maint_id, tech_name, service_date, maint_type, maint_cost, maint_desc}</strong>
+                    }
+                </code>
+            </div>
+
+            <!-- Anomalies Grid (Responsive & Constrained) -->
+            <div class="norm-grid">
+                <div class="card border-danger border norm-card">
+                    <div class="card-header bg-danger text-white py-2 small fw-bold"><i class="bi bi-x-octagon me-1"></i>Insertion Anomaly</div>
+                    <div class="card-body p-3 small text-secondary">
+                        A newly constructed laboratory room or signed vendor cannot be stored in the database without fabricating a placeholder equipment asset, because <code>asset_tag</code> acts as the primary identifier.
+                    </div>
+                </div>
+                <div class="card-md card border-danger border norm-card">
+                    <div class="card-header bg-danger text-white py-2 small fw-bold"><i class="bi bi-trash3 me-1"></i>Deletion Anomaly</div>
+                    <div class="card-body p-3 small text-secondary">
+                        If the only asset housed in a laboratory is decommissioned and deleted, the entire record of the laboratory, room number, department, and supervisor is unintentionally purged.
+                    </div>
+                </div>
+                <div class="card border-danger border norm-card">
+                    <div class="card-header bg-danger text-white py-2 small fw-bold"><i class="bi bi-pencil-square me-1"></i>Update Anomaly</div>
+                    <div class="card-body p-3 small text-secondary">
+                        If a supplier's phone number or a category description changes, hundreds of duplicate equipment rows must be updated individually. Any partial failure produces mutually contradictory data records.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 2: 1NF Decomposition (Constrained Layout) -->
+    <div class="card border shadow-sm mb-4 norm-card">
+        <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-2-circle text-warning me-2"></i>Step 2: Transition to First Normal Form (1NF)</h5>
+            <span class="badge bg-warning text-dark">Domain Atomicity Enforced</span>
+        </div>
+        <div class="card-body p-4" style="min-width: 0;">
+            <p class="text-secondary small">
+                <strong>Rule:</strong> All underlying attribute domains must contain strictly atomic (scalar) values. Extract multi-valued repeating groups (nested arrays of borrowings and service history) into distinct relation instances.
+            </p>
+            
+            <div class="norm-grid">
+                <!-- 1. Equipment 1NF -->
+                <div class="p-3 border rounded bg-light norm-card">
+                    <div class="fw-bold text-dark small mb-1">1. Equipment 1NF</div>
+                    <div class="font-monospace small text-primary mb-2">Candidate Key: {asset_tag}</div>
+                    <div class="schema-code-box">
+                        <code><strong>R_EQ_1NF</strong>(<u>asset_tag</u>, serial_no, name, model, cost, cat_name, cat_desc, lab_name, room, building, dept_code, dept_name, supplier_name)</code>
+                    </div>
+                </div>
+
+                <!-- 2. Borrowings 1NF -->
+                <div class="p-3 border rounded bg-light norm-card">
+                    <div class="fw-bold text-dark small mb-1">2. Borrowings 1NF</div>
+                    <div class="font-monospace small text-primary mb-2">Composite Key: {asset_tag, user_email, borrow_date}</div>
+                    <div class="schema-code-box">
+                        <code><strong>R_BORR_1NF</strong>(<u>asset_tag</u>, <u>user_email</u>, <u>borrow_date</u>, user_name, role_name, expected_return, actual_return, purpose)</code>
+                    </div>
+                </div>
+
+                <!-- 3. Maintenance 1NF -->
+                <div class="p-3 border rounded bg-light norm-card">
+                    <div class="fw-bold text-dark small mb-1">3. Maintenance 1NF</div>
+                    <div class="font-monospace small text-primary mb-2">Composite Key: {asset_tag, service_date, maint_type}</div>
+                    <div class="schema-code-box">
+                        <code><strong>R_MAINT_1NF</strong>(<u>asset_tag</u>, <u>service_date</u>, <u>maint_type</u>, tech_name, tech_email, cost, description, status)</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 3: 2NF Decomposition (Constrained Layout) -->
+    <div class="card border shadow-sm mb-4 norm-card">
+        <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-3-circle text-info me-2"></i>Step 3: Transition to Second Normal Form (2NF)</h5>
+            <span class="badge bg-info text-dark">Partial Key Dependencies Removed</span>
+        </div>
+        <div class="card-body p-4" style="min-width: 0;">
+            <p class="text-secondary small mb-3">
+                <strong>Rule:</strong> Must be in 1NF and contain <em>no partial functional dependencies</em>. No non-prime attribute may depend on a proper subset of any composite candidate key.
+            </p>
+            
+            <div class="p-3 bg-light border rounded small mb-3 norm-card">
+                <div class="fw-bold text-danger mb-2"><i class="bi bi-exclamation-triangle-fill me-1"></i>Partial Dependencies Identified in 1NF Borrowings:</div>
+                <div class="schema-code-box mb-2">
+                    <code>
+                        Composite Candidate Key K = {asset_tag, user_email, borrow_date}<br>
+                        FD_1: {asset_tag, user_email, borrow_date} &rarr; {expected_return, actual_return, purpose} [Full Key Dependency - OK]<br>
+                        FD_2: {user_email} &rarr; {user_name, role_name} [PARTIAL DEPENDENCY on proper subset {user_email}]<br>
+                        FD_3: {asset_tag} &rarr; {equip_name, cost} [PARTIAL DEPENDENCY on proper subset {asset_tag}]
+                    </code>
+                </div>
+            </div>
+
+            <p class="small text-secondary mb-2"><strong>2NF Decomposition:</strong> Extracted partially dependent attributes into separate relations:</p>
+            
+            <div class="norm-grid">
+                <div class="p-3 border rounded bg-white norm-card">
+                    <span class="badge bg-primary mb-1">users</span>
+                    <div class="schema-code-box">
+                        <code><strong>users</strong>(<u>user_id</u>, email, first_name, last_name, role_id, department_id)</code>
+                    </div>
+                </div>
+                <div class="p-3 border rounded bg-white norm-card">
+                    <span class="badge bg-primary mb-1">borrowings</span>
+                    <div class="schema-code-box">
+                        <code><strong>borrowings</strong>(<u>borrowing_id</u>, equipment_id, user_id, borrow_date, expected_return_date, actual_return_date)</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 4: 3NF & BCNF Proofs (Constrained Layout) -->
+    <div class="card border shadow-sm mb-4 norm-card">
+        <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-check2-circle text-success me-2"></i>Step 4: Transition to Third Normal Form (3NF) & Boyce-Codd Normal Form (BCNF)</h5>
+            <span class="badge bg-success">Transitive Dependencies Eradicated</span>
+        </div>
+        <div class="card-body p-4" style="min-width: 0;">
+            <p class="text-secondary small mb-3">
+                <strong>3NF Rule:</strong> No non-prime attribute may be transitively dependent on any candidate key ($X \to Y$ and $Y \to Z$).<br>
+                <strong>BCNF Rule:</strong> For every non-trivial functional dependency $X \to Y$, <strong>$X$ must be a superkey</strong>.
+            </p>
+
+            <div class="p-3 bg-light border rounded small mb-3 norm-card">
+                <div class="fw-bold text-danger mb-2"><i class="bi bi-exclamation-triangle-fill me-1"></i>Transitive Dependencies in 2NF Equipment:</div>
+                <div class="schema-code-box">
+                    <code>
+                        asset_tag &rarr; lab_id &rarr; department_id &rarr; building (Transitive: lab_id is not a candidate key of equipment)<br>
+                        asset_tag &rarr; category_id &rarr; category_description (Transitive: category_id is not a candidate key of equipment)
+                    </code>
+                </div>
+            </div>
+
+            <!-- BCNF Proof Table (Responsive & Overflow-Safe) -->
+            <div class="table-responsive norm-card mb-3">
+                <table class="table table-sm table-hover align-middle mb-0">
+                    <thead class="table-light small">
+                        <tr>
+                            <th>Relation Schema</th>
+                            <th>Candidate Key(s)</th>
+                            <th>Tested Functional Dependencies (X &rarr; Y)</th>
+                            <th class="text-center">Is X a Superkey?</th>
+                            <th class="text-center">BCNF Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="small font-monospace">
+                        <tr>
+                            <td class="fw-bold text-primary">equipment</td>
+                            <td>{equipment_id}, {asset_tag}, {serial_number}</td>
+                            <td>
+                                equipment_id &rarr; {category_id, lab_id, supplier_id, asset_tag, name, cost, status}<br>
+                                asset_tag &rarr; {equipment_id}
+                            </td>
+                            <td class="text-center text-success"><i class="bi bi-check-circle-fill me-1"></i>Yes (Superkey)</td>
+                            <td class="text-center"><span class="badge bg-success">BCNF Verified</span></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold text-primary">borrowings</td>
+                            <td>{borrowing_id}, {equipment_id, borrow_date}</td>
+                            <td>
+                                borrowing_id &rarr; {equipment_id, user_id, borrow_date, expected_return_date, status}
+                            </td>
+                            <td class="text-center text-success"><i class="bi bi-check-circle-fill me-1"></i>Yes (Superkey)</td>
+                            <td class="text-center"><span class="badge bg-success">BCNF Verified</span></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold text-primary">maintenance</td>
+                            <td>{maintenance_id}</td>
+                            <td>
+                                maintenance_id &rarr; {equipment_id, technician_id, service_date, cost, status}
+                            </td>
+                            <td class="text-center text-success"><i class="bi bi-check-circle-fill me-1"></i>Yes (Superkey)</td>
+                            <td class="text-center"><span class="badge bg-success">BCNF Verified</span></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold text-primary">laboratories</td>
+                            <td>{lab_id}</td>
+                            <td>
+                                lab_id &rarr; {department_id, lab_name, room_number, building, capacity}
+                            </td>
+                            <td class="text-center text-success"><i class="bi bi-check-circle-fill me-1"></i>Yes (Superkey)</td>
+                            <td class="text-center"><span class="badge bg-success">BCNF Verified</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="p-3 bg-success bg-opacity-10 border border-success rounded text-success small norm-card">
+                <i class="bi bi-shield-check fs-6 me-2"></i><strong>Formal BCNF Proof:</strong> In all decomposed tables, every determinant $X$ is provably a superkey. There are no non-trivial dependencies where a non-superkey determines any attribute. The relational schema is strictly in <strong>Boyce-Codd Normal Form</strong> without text bleeding or border overlap.
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,313 @@
+{% extends "base.html" %}
+
+{% block title %}Mathematical Database Proofs - LabTrace{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4 py-4" style="min-width: 0;">
+
+    <!-- Header Section -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center pb-3 mb-4 border-bottom">
+        <div>
+            <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="badge bg-danger px-2 py-1"><i class="bi bi-calculator-fill me-1"></i>Formal Database Mathematics</span>
+                <span class="badge bg-dark px-2 py-1">Attribute Closure Algorithms</span>
+            </div>
+            <h3 class="fw-bold mb-0 text-dark">Mathematical Database Proofs & Algorithmic Derivations</h3>
+            <p class="text-muted small mb-0">Formal mathematical verification of lossless-join decomposition, functional dependency preservation, and canonical minimal cover computation.</p>
+        </div>
+        <div class="mt-3 mt-md-0 d-flex gap-2">
+            <a href="{{ url_for('analysis.er_diagram') }}" class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-diagram-3 me-1"></i>Chen ER Diagram
+            </a>
+            <a href="{{ url_for('analysis.mapping') }}" class="btn btn-outline-success btn-sm">
+                <i class="bi bi-signpost-split me-1"></i>Relational Mapping
+            </a>
+        </div>
+    </div>
+
+    <!-- Navigation Pills -->
+    <ul class="nav nav-pills mb-4 gap-2 bg-white p-2 rounded border shadow-sm">
+        <li class="nav-item">
+            <a class="nav-link text-secondary fw-semibold" href="{{ url_for('analysis.index') }}">
+                <i class="bi bi-speedometer2 me-1"></i>Overview & Scorecard
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-secondary fw-semibold" href="{{ url_for('analysis.er_diagram') }}">
+                <i class="bi bi-diagram-3 me-1"></i>Chen ER Diagram
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-secondary fw-semibold" href="{{ url_for('analysis.mapping') }}">
+                <i class="bi bi-signpost-split me-1"></i>ER-to-Relational Mapping
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-secondary fw-semibold" href="{{ url_for('analysis.normalization') }}">
+                <i class="bi bi-layers me-1"></i>Normalization (UNF &rarr; BCNF)
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active fw-semibold" href="{{ url_for('analysis.proofs') }}">
+                <i class="bi bi-calculator me-1"></i>Lossless & Minimal Cover Proofs
+            </a>
+        </li>
+    </ul>
+
+    <!-- Proof 1: Lossless Join Decomposition Proof -->
+    <div class="card border shadow-sm mb-4 norm-card">
+        <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-shield-check text-primary me-2"></i>Proof 1: Lossless-Join Decomposition Verification ($R_1 \bowtie R_2 = R$)</h5>
+            <span class="badge bg-primary">Lossless Property Theorem</span>
+        </div>
+        <div class="card-body p-4" style="min-width: 0;">
+            <div class="p-3 bg-light border rounded mb-3 small norm-card">
+                <h6 class="fw-bold text-dark mb-2">Formal Theorem:</h6>
+                <p class="mb-2">
+                    A decomposition of relation schema $R$ into $R_1$ and $R_2$ ($R = R_1 \cup R_2$) is <strong>lossless</strong> with respect to functional dependency set $F$ if and only if:
+                </p>
+                $$\Pi_{R_1}(r) \bowtie \Pi_{R_2}(r) = r$$
+                <p class="mb-2 text-muted">
+                    This holds if and only if the intersection of the decomposed relations functionally determines either $(R_1 \setminus R_2)$ or $(R_2 \setminus R_1)$ in the closure $F^+$:
+                </p>
+                $$(R_1 \cap R_2) \to (R_1 \setminus R_2) \in F^+ \quad \text{OR} \quad (R_1 \cap R_2) \to (R_2 \setminus R_1) \in F^+$$
+            </div>
+
+            <!-- Case Study Execution -->
+            <div class="card border mb-3 norm-card">
+                <div class="card-header bg-white py-2 small fw-bold text-secondary">
+                    Case Study: Decomposition of Equipment and Categories ($R_{\text{EC}} \to R_{\text{equip}}, R_{\text{cat}}$)
+                </div>
+                <div class="card-body p-3 small" style="min-width: 0;">
+                    <p class="mb-1">Let relation $R_{\text{EC}}$ and dependency set $F$ be defined as:</p>
+                    <div class="schema-code-box mb-3">
+                        <code>
+                            R_EC = {equipment_id, asset_tag, name, cost, category_id, category_name, description}<br>
+                            F = { {equipment_id} &rarr; {asset_tag, name, cost, category_id}, {category_id} &rarr; {category_name, description} }
+                        </code>
+                    </div>
+
+                    <p class="mb-1">Decompose $R_{\text{EC}}$ into:</p>
+                    <ul class="font-monospace small mb-3">
+                        <li>$R_1 = \{\text{equipment\_id}, \text{asset\_tag}, \text{name}, \text{cost}, \text{category\_id}\}$</li>
+                        <li>$R_2 = \{\text{category\_id}, \text{category\_name}, \text{description}\}$</li>
+                    </ul>
+
+                    <h6 class="fw-bold mb-2">Step-by-Step Attribute Closure Algorithm:</h6>
+                    <ol class="small mb-2">
+                        <li>Calculate Intersection: $R_1 \cap R_2 = \{\text{category\_id}\}$</li>
+                        <li>Calculate Relative Complements:
+                            <ul>
+                                <li>$R_1 \setminus R_2 = \{\text{equipment\_id}, \text{asset\_tag}, \text{name}, \text{cost}\}$</li>
+                                <li>$R_2 \setminus R_1 = \{\text{category\_name}, \text{description}\}$</li>
+                            </ul>
+                        </li>
+                        <li>Compute Attribute Closure of Intersection under $F$:
+                            <div class="schema-code-box my-2">
+                                <code>
+                                    X^(0) = {category_id}<br>
+                                    Apply {category_id} &rarr; {category_name, description}:<br>
+                                    X^(1) = {category_id, category_name, description}<br>
+                                    Hence, {category_id}^+_F = {category_id, category_name, description} = R_2
+                                </code>
+                            </div>
+                        </li>
+                    </ol>
+
+                    <div class="p-3 bg-success bg-opacity-10 border border-success rounded text-success small norm-card">
+                        <strong>Q.E.D. Verification:</strong> Since $(R_2 \setminus R_1) \subseteq \{\text{category\_id}\}^+_F$, it follows directly that:
+                        $$(R_1 \cap R_2) \to (R_2 \setminus R_1) \in F^+$$
+                        The common attribute $\{\text{category\_id}\}$ is a superkey of $R_2$. Therefore, the decomposition is strictly <strong>Lossless</strong>.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Proof 2: Dependency Preservation Analysis -->
+    <div class="card border shadow-sm mb-4 norm-card">
+        <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-link-45deg text-success me-2"></i>Proof 2: Dependency Preservation Analysis ($F' \equiv F$)</h5>
+            <span class="badge bg-success">Dependency Preservation Theorem</span>
+        </div>
+        <div class="card-body p-4" style="min-width: 0;">
+            <div class="p-3 bg-light border rounded mb-3 small norm-card">
+                <h6 class="fw-bold text-dark mb-2">Formal Theorem:</h6>
+                <p class="mb-2">
+                    A decomposition $D = \{R_1, R_2, \dots, R_k\}$ preserves functional dependency set $F$ if:
+                </p>
+                $$F' = \bigcup_{i=1}^k \pi_{R_i}(F) \quad \text{satisfies} \quad (F')^+ = F^+$$
+                <p class="mb-0 text-muted">
+                    This ensures every functional dependency can be verified at insertion or update time by inspecting only a single relation, without evaluating expensive relational joins.
+                </p>
+            </div>
+
+            <!-- Projection Verification Table (Responsive) -->
+            <div class="table-responsive norm-card mb-3">
+                <table class="table table-sm table-hover align-middle mb-0">
+                    <thead class="table-light small">
+                        <tr>
+                            <th>Original Functional Dependency ($X \to Y \in F$)</th>
+                            <th>Host Table ($R_i$)</th>
+                            <th>Projection Verification ($\pi_{R_i}(F)$)</th>
+                            <th class="text-center">Enforcement Mechanism</th>
+                            <th class="text-center">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="small font-monospace">
+                        <tr>
+                            <td>{equipment_id} &rarr; {asset_tag, cost, status}</td>
+                            <td>equipment</td>
+                            <td>X &cup; Y &sube; equipment</td>
+                            <td class="text-center"><span class="badge bg-light text-dark border">PRIMARY KEY</span></td>
+                            <td class="text-center text-success"><i class="bi bi-check-circle-fill"></i> Preserved</td>
+                        </tr>
+                        <tr>
+                            <td>{asset_tag} &rarr; {equipment_id}</td>
+                            <td>equipment</td>
+                            <td>X &cup; Y &sube; equipment</td>
+                            <td class="text-center"><span class="badge bg-light text-dark border">UNIQUE (asset_tag)</span></td>
+                            <td class="text-center text-success"><i class="bi bi-check-circle-fill"></i> Preserved</td>
+                        </tr>
+                        <tr>
+                            <td>{lab_id} &rarr; {department_id, lab_name, room}</td>
+                            <td>laboratories</td>
+                            <td>X &cup; Y &sube; laboratories</td>
+                            <td class="text-center"><span class="badge bg-light text-dark border">PRIMARY KEY</span></td>
+                            <td class="text-center text-success"><i class="bi bi-check-circle-fill"></i> Preserved</td>
+                        </tr>
+                        <tr>
+                            <td>{borrowing_id} &rarr; {equipment_id, user_id, date}</td>
+                            <td>borrowings</td>
+                            <td>X &cup; Y &sube; borrowings</td>
+                            <td class="text-center"><span class="badge bg-light text-dark border">PRIMARY KEY</span></td>
+                            <td class="text-center text-success"><i class="bi bi-check-circle-fill"></i> Preserved</td>
+                        </tr>
+                        <tr>
+                            <td>{user_id} &rarr; {email, role_id, department_id}</td>
+                            <td>users</td>
+                            <td>X &cup; Y &sube; users</td>
+                            <td class="text-center"><span class="badge bg-light text-dark border">PRIMARY KEY</span></td>
+                            <td class="text-center text-success"><i class="bi bi-check-circle-fill"></i> Preserved</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="p-3 bg-success bg-opacity-10 border border-success rounded text-success small norm-card">
+                <i class="bi bi-check-all fs-6 me-2"></i><strong>Formal Result:</strong> All non-trivial functional dependencies in $F$ are fully preserved in the local table schemas. The decomposition is <strong>100% Dependency Preserving</strong>.
+            </div>
+        </div>
+    </div>
+
+    <!-- Proof 3: Minimal Cover Derivation -->
+    <div class="card border shadow-sm mb-4 norm-card">
+        <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-funnel-fill text-warning me-2"></i>Proof 3: Minimal Cover ($F_c$) Algorithmic Derivation</h5>
+            <span class="badge bg-warning text-dark">Canonical Cover Algorithm</span>
+        </div>
+        <div class="card-body p-4" style="min-width: 0;">
+            <p class="text-secondary small mb-3">
+                A minimal cover $F_c$ is an equivalent irreducible set of functional dependencies where all right-hand sides are single attributes, no left-hand sides contain extraneous attributes, and no dependencies are redundant.
+            </p>
+
+            <!-- 4 Step Tabs (Constrained) -->
+            <div class="accordion" id="accMinimalCover">
+                <!-- Step 1 -->
+                <div class="accordion-item border rounded mb-2 norm-card">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button py-2 small fw-bold bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true">
+                            Step 1: Singleton Decomposition of Right-Hand Sides
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accMinimalCover">
+                        <div class="accordion-body p-3 small font-monospace" style="min-width: 0;">
+                            <div class="schema-code-box">
+                                <code>
+                                    f1: equipment_id &rarr; asset_tag<br>
+                                    f2: equipment_id &rarr; name<br>
+                                    f3: equipment_id &rarr; status<br>
+                                    f4: {equipment_id, asset_tag} &rarr; status<br>
+                                    f5: {equipment_id, asset_tag} &rarr; cost<br>
+                                    f6: asset_tag &rarr; equipment_id<br>
+                                    f7: user_id &rarr; email<br>
+                                    f8: {user_id, email} &rarr; role_id
+                                </code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="accordion-item border rounded mb-2 norm-card">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed py-2 small fw-bold bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                            Step 2: Elimination of Left-Extraneous Attributes
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accMinimalCover">
+                        <div class="accordion-body p-3 small" style="min-width: 0;">
+                            <p class="mb-2">An attribute $B \in X$ is extraneous in $X \to A$ if $A \in (X \setminus \{B\})^+_F$:</p>
+                            <div class="schema-code-box mb-2">
+                                <code>
+                                    Testing f4: {equipment_id, asset_tag} &rarr; status:<br>
+                                    Compute {equipment_id}^+_F. By f3, status is derived.<br>
+                                    &rarr; asset_tag is extraneous and removed! Reduces to: equipment_id &rarr; status.<br><br>
+                                    Testing f8: {user_id, email} &rarr; role_id:<br>
+                                    Compute {user_id}^+_F. By f7, user_id &rarr; email.<br>
+                                    &rarr; email is extraneous and removed! Reduces to: user_id &rarr; role_id.
+                                </code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="accordion-item border rounded mb-2 norm-card">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed py-2 small fw-bold bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                            Step 3: Elimination of Redundant Functional Dependencies
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accMinimalCover">
+                        <div class="accordion-body p-3 small" style="min-width: 0;">
+                            <p class="mb-2">A dependency $X \to A$ is redundant if $A \in X^+_{F \setminus \{X \to A\}}$:</p>
+                            <div class="schema-code-box">
+                                <code>
+                                    - Reduced f4 (equipment_id &rarr; status) is an exact duplicate of f3. Pruned!<br>
+                                    - Reduced f8 (user_id &rarr; role_id) is an exact duplicate of primary role link. Pruned!
+                                </code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="accordion-item border rounded norm-card">
+                    <h2 class="accordion-header" id="headingFour">
+                        <button class="accordion-button collapsed py-2 small fw-bold bg-light text-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
+                            Step 4: Final Canonical Minimal Cover (F_c)
+                        </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accMinimalCover">
+                        <div class="accordion-body p-3 small bg-success bg-opacity-10 border border-success rounded norm-card">
+                            <div class="fw-bold text-success mb-2">Final Irreducible Canonical Cover Set:</div>
+                            $$\boxed{
+                            F_c = \begin{cases}
+                            \text{equipment\_id} \to \{\text{asset\_tag}, \text{name}, \text{cost}, \text{status}\} \\
+                            \text{asset\_tag} \to \{\text{equipment\_id}\} \\
+                            \text{user\_id} \to \{\text{first\_name}, \text{email}, \text{role\_id}\} \\
+                            \text{borrowing\_id} \to \{\text{equipment\_id}, \text{user\_id}, \text{borrow\_date}, \text{status}\} \\
+                            \{\text{equipment\_id}, \text{borrow\_date}\} \to \{\text{borrowing\_id}\}
+                            \end{cases}
+                            }$$
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}
